@@ -16,9 +16,11 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 package invasion.force.board;
+
 /**
  * @author sukhenka (Sukhenko Artur)
  */
 public interface Positionable {
+
     public Position getPosition();
 }

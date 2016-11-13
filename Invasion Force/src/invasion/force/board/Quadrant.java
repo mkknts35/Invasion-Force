@@ -29,165 +29,166 @@ import java.util.Random;
 import invasion.force.settings.Configs;
 
 public class Quadrant implements Positionable {
-	protected final Position position = new Position(-1, -1);
-	/**
-	 * sectors[][] array of Sectors(Sector contain SpaceObject
-	 * like Ship, Jovian etc)
-	 */
-	private final Sector sectors[][] = new Sector[Configs.QUADRANT_SIZE][Configs.QUADRANT_SIZE];
-	private boolean initialized = false;
-	private final ArrayList<SpaceObject> generatedObjects = new ArrayList<SpaceObject>();
-	private Random rand = new Random();
-	private final ArrayList<Weapon> weaponList = new ArrayList<Weapon>();
-	/**
-	 * If ship is in this Quadrant active = true
-	 */
-	public boolean active = false;
 
-	/**
-	 * @return the sectors[][]
-	 */
-	public Sector[][] getSectors() {
-		return sectors;
-	}
+    protected final Position position = new Position(-1, -1);
+    /**
+     * sectors[][] array of Sectors(Sector contain SpaceObject like Ship, Jovian
+     * etc)
+     */
+    private final Sector sectors[][] = new Sector[Configs.QUADRANT_SIZE][Configs.QUADRANT_SIZE];
+    private boolean initialized = false;
+    private final ArrayList<SpaceObject> generatedObjects = new ArrayList<SpaceObject>();
+    private Random rand = new Random();
+    private final ArrayList<Weapon> weaponList = new ArrayList<Weapon>();
+    /**
+     * If ship is in this Quadrant active = true
+     */
+    public boolean active = false;
 
-	private void init() {
-		if (!initialized) {
-			for (int i = 0; i < sectors.length; i++) {
-				for (int j = 0; j < sectors.length; j++) {
-					sectors[i][j] = 
-                                            new Sector(new Position(i, j), this); 
-                                            // is it right order?
-				}
-			}
-			initialized = true;
-		}
-	}
+    /**
+     * @return the sectors[][]
+     */
+    public Sector[][] getSectors() {
+        return sectors;
+    }
 
-	/**
-	 * returns the position of the Quadrant in Space
-	 */
-	@Override
-	public Position getPosition() {
-		return position;
-	}
+    private void init() {
+        if (!initialized) {
+            for (int i = 0; i < sectors.length; i++) {
+                for (int j = 0; j < sectors.length; j++) {
+                    sectors[i][j]
+                            = new Sector(new Position(i, j), this);
+                    // is it right order?
+                }
+            }
+            initialized = true;
+        }
+    }
 
-	/**
-	 * method put generated spaceObjects to the sectors.
-	 */
-	public void populate() {
-		for (SpaceObject obj : generatedObjects) {
-			populateSector(obj);
-		}
+    /**
+     * returns the position of the Quadrant in Space
+     */
+    @Override
+    public Position getPosition() {
+        return position;
+    }
 
-	}
+    /**
+     * method put generated spaceObjects to the sectors.
+     */
+    public void populate() {
+        for (SpaceObject obj : generatedObjects) {
+            populateSector(obj);
+        }
 
-	private void populateSector(SpaceObject obj) {
-		Position p = randomPosition();
-		if (getSector(p).getInhabitant() == null) {
-			obj.setSector(getSector(p));
-			//getSector(p).setInhabitant(obj);
-		} else {
-			populateSector(obj);
-		}
-	}
+    }
 
-	private Position randomPosition() {
-		return (new Position(rand.nextInt(Configs.QUADRANT_SIZE),
-				rand.nextInt(Configs.QUADRANT_SIZE)));
-	}
+    private void populateSector(SpaceObject obj) {
+        Position p = randomPosition();
+        if (getSector(p).getInhabitant() == null) {
+            obj.setSector(getSector(p));
+            //getSector(p).setInhabitant(obj);
+        } else {
+            populateSector(obj);
+        }
+    }
 
-	public ArrayList<SpaceObject> getAllObjectsFromQuadrant() {
-		ArrayList<SpaceObject> obcts = new ArrayList<SpaceObject>();
-		for (Sector[] sctrs : sectors) {
-			for (Sector sector : sctrs) {
-				obcts.add(sector.getInhabitant());
-			}
-		}
-		return obcts;
+    private Position randomPosition() {
+        return (new Position(rand.nextInt(Configs.QUADRANT_SIZE),
+                rand.nextInt(Configs.QUADRANT_SIZE)));
+    }
 
-	}
+    public ArrayList<SpaceObject> getAllObjectsFromQuadrant() {
+        ArrayList<SpaceObject> obcts = new ArrayList<SpaceObject>();
+        for (Sector[] sctrs : sectors) {
+            for (Sector sector : sctrs) {
+                obcts.add(sector.getInhabitant());
+            }
+        }
+        return obcts;
 
-	public Sector getSector(Position p) {
-		return sectors[p.getRow()][p.getCol()];
+    }
 
-	}
+    public Sector getSector(Position p) {
+        return sectors[p.getRow()][p.getCol()];
 
-	public void unpopulate() {
-		weaponList.clear();
-		for (SpaceObject i : generatedObjects) {
-			//for (Sector sector : sctrs) {
-			//	sector.setInhabitant(null);
-			//}
-			i.setSector(null);
-		}
-	}
+    }
 
-	public Sector getSector(int row, int col) {
-		Position p = new Position(row, col);
-		return sectors[p.getRow()][p.getCol()];
+    public void unpopulate() {
+        weaponList.clear();
+        for (SpaceObject i : generatedObjects) {
+            //for (Sector sector : sctrs) {
+            //	sector.setInhabitant(null);
+            //}
+            i.setSector(null);
+        }
+    }
 
-	}
+    public Sector getSector(int row, int col) {
+        Position p = new Position(row, col);
+        return sectors[p.getRow()][p.getCol()];
 
-	public Quadrant() {
-		init();
-	}
+    }
 
-	public Quadrant(Position p) {
-		position.setPositionAt(p);
-		init();
-	}
+    public Quadrant() {
+        init();
+    }
 
-	public Sector getNext(Sector sector, int direction) {
-		int nextRow = sector.getPosition().getRow();
-		int nextCol = sector.getPosition().getCol();
-		Position pos = new Position();
-		switch (direction) {
-		case Configs.NORTH:
-			nextCol -= 1;
-			break;
-		case Configs.NORTH_EAST:
-			nextRow += 1;
-			nextCol -= 1;
-			break;
-		case Configs.EAST:
-			nextRow += 1;
-			break;
-		case Configs.SOUTH_EAST:
-			nextRow += 1;
-			nextCol += 1;
-			break;
-		case Configs.SOUTH:
-			nextCol += 1;
-			break;
-		case Configs.SOUTH_WEST:
-			nextRow -= 1;
-			nextCol += 1;
-			break;
-		case Configs.WEST:
-			nextRow -= 1;
-			break;
-		case Configs.NORTH_WEST:
-			nextRow -= 1;
-			nextCol -= 1;
-			break;
-		default:
-			//return sector;
-		}
-		pos.setCol(nextCol);
-		pos.setRow(nextRow);
-		if (!pos.isValid()) {
-			return null;
-		}
-		return getSector(pos);
-	}
+    public Quadrant(Position p) {
+        position.setPositionAt(p);
+        init();
+    }
 
-	public ArrayList<SpaceObject> getGeneratedObjects() {
-		return generatedObjects;
-	}
+    public Sector getNext(Sector sector, int direction) {
+        int nextRow = sector.getPosition().getRow();
+        int nextCol = sector.getPosition().getCol();
+        Position pos = new Position();
+        switch (direction) {
+            case Configs.NORTH:
+                nextCol -= 1;
+                break;
+            case Configs.NORTH_EAST:
+                nextRow += 1;
+                nextCol -= 1;
+                break;
+            case Configs.EAST:
+                nextRow += 1;
+                break;
+            case Configs.SOUTH_EAST:
+                nextRow += 1;
+                nextCol += 1;
+                break;
+            case Configs.SOUTH:
+                nextCol += 1;
+                break;
+            case Configs.SOUTH_WEST:
+                nextRow -= 1;
+                nextCol += 1;
+                break;
+            case Configs.WEST:
+                nextRow -= 1;
+                break;
+            case Configs.NORTH_WEST:
+                nextRow -= 1;
+                nextCol -= 1;
+                break;
+            default:
+            //return sector;
+        }
+        pos.setCol(nextCol);
+        pos.setRow(nextRow);
+        if (!pos.isValid()) {
+            return null;
+        }
+        return getSector(pos);
+    }
 
-	public ArrayList<Weapon> getWeaponList() {
-		return weaponList;
-	}
+    public ArrayList<SpaceObject> getGeneratedObjects() {
+        return generatedObjects;
+    }
+
+    public ArrayList<Weapon> getWeaponList() {
+        return weaponList;
+    }
 
 }
