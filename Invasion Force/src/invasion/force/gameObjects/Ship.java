@@ -20,7 +20,6 @@ package invasion.force.gameObjects;
 import static invasion.force.settings.Configs.*;
 import java.util.ArrayList;
 import invasion.force.settings.Configs;
-import invasion.force.board.Position;
 import invasion.force.board.Quadrant;
 import invasion.force.board.Sector;
 import invasion.force.board.Space;
@@ -41,9 +40,10 @@ public class Ship extends SpaceObject implements Movable {
     private final PowerSystem systems;
 
     /**
-     * REQUIRES: @param sec - see super class for requirements MODIFIES: the
-     * game state EFFECTS: Creates a SpaceObject which the player will be in
-     * control of
+     * REQUIRES: 
+     *      @param sec - see super class for requirements 
+     * MODIFIES: the game state 
+     * EFFECTS: Creates a SpaceObject which the player will be in control of
      */
     public Ship(Sector sec) {
         super(sec);
@@ -53,8 +53,8 @@ public class Ship extends SpaceObject implements Movable {
     }
 
     /**
-     * REQUIRES: @param type - be a valid weapon type *see settings.Configs
-     *
+     * REQUIRES: 
+     * @param type - be a valid weapon type *see settings.Configs
      * @param direction - be a valid direction *see settings.Configs MODIFIES:
      * game state EFFECTS: shoots a weapon of the given type in the given
      * direction A typical call would look like shootWeapon(MASER, NW); using
@@ -299,23 +299,28 @@ public class Ship extends SpaceObject implements Movable {
         }
 
         /**
-         * REQUIRES: nothing MODIFIES: nothing EFFECTS: returns the amount of
-         * power currently being used by all ship systems
+         * REQUIRES: nothing 
+         * MODIFIES: nothing 
+         * EFFECTS: returns the amount of power currently being used by all ship
+         * systems
          */
         public double getPowerConsumed() {
             return this.powerConsumed;
         }
 
         /**
-         * REQUIRES: @param system - a valid system id *see settings.Configs
-         *
-         * @param powerLevel - be a value that won't cause the power consumed to
-         * exceed the current power available MODIFIES: the given ship system
+         * REQUIRES: 
+         *      @param system - a valid system id *see settings.Configs
+         *      @param powerLevel - be a value that won't cause the power 
+         *                          consumed to exceed the current power 
+         *                          available 
+         * MODIFIES: the given ship system
          * EFFECTS: Sets power available to the given system to the given value
          * and recalculates the current drain on the overall system.
          * @throws CriticalPowerException
          */
-        public void setSystemLevel(int system, double powerLevel) throws CriticalPowerException {
+        public void setSystemLevel(int system, double powerLevel) 
+                throws CriticalPowerException {
             //double loadIncrease = powerLevel - systems.get(system).getPower();
             //if(this.powerAvailable > (this.powerConsumed + loadIncrease)){
             systems.get(system).setPower(powerLevel);
@@ -325,17 +330,18 @@ public class Ship extends SpaceObject implements Movable {
 
         /**
          * REQUIRES: @param type - be a valid system id *see settings.Configs
-         * MODIFIES: nothing EFFECTS: return a pointer to the system requested
-         * in type
+         * MODIFIES: nothing 
+         * EFFECTS: return a pointer to the system requested in type
          */
         public ShipSystem getSystem(int type) {
             return systems.get(type);
         }
 
         /**
-         * REQUIRES: @param type - a valid system id *see settings.Configs
-         *
-         * @param system - an initialized Ship.ShipSystem MODIFIES: this
+         * REQUIRES: 
+         *      @param type - a valid system id *see settings.Configs
+         *      @param system - an initialized Ship.ShipSystem 
+         * MODIFIES: this
          * EFFECTS: replace system with the given one
          *
          * Note: this method is not needed in the current version of the game,
@@ -345,12 +351,13 @@ public class Ship extends SpaceObject implements Movable {
         //	this.systems.add(type, system);
         //}
         /**
-         * REQUIRES: nothing MODIFIES: this EFFECTS: drains the amount
-         * Configs.POWER_SAP from the power available If the ship's shields are
-         * active both the shields power and the power available are drained,
-         * but by a lesser amount. If the sap results in the load on the power
-         * system exceeding the power available a criticalPowerException will be
-         * thrown
+         * REQUIRES: nothing 
+         * MODIFIES: this 
+         * EFFECTS: drains the amount Configs.POWER_SAP from the power available 
+         * If the ship's shields are active both the shields power and the power 
+         * available are drained, but by a lesser amount. If the sap results in 
+         * the load on the power system exceeding the power available a 
+         * criticalPowerException will be generated.
          *
          */
         public void sapPower(double amount) throws CriticalPowerException {
@@ -477,12 +484,14 @@ public class Ship extends SpaceObject implements Movable {
         }
 
         /**
-         * REQUIRES: @param velocity[Ship.MAGNITUDE] >= 0
-         *
-         * @param velocity[Ship.DIRECTION] - must be a valid value as outlined
-         * in settings.Configs MODIFIES: this EFFECTS: Changes the state of this
-         * to reflect the given vector Note: the vector {0, Configs.NEUTRAL}
-         * sets this inactive ie. turns the engine off
+         * REQUIRES: 
+         *      @param velocity[Ship.MAGNITUDE] >= 0
+         *      @param velocity[Ship.DIRECTION] - must be a valid value as 
+         *             outlined in settings.Configs 
+         * MODIFIES: this 
+         * EFFECTS: Changes the state of this to reflect the given vector 
+         *  Note: the vector {0, Configs.NEUTRAL} sets this inactive 
+         *          ie. turns the engine off
          */
         public void setActive(int[] velocity) {
             if (0 == velocity[Ship.MAGNITUDE]) {
@@ -647,17 +656,19 @@ public class Ship extends SpaceObject implements Movable {
     private class HypEngines extends Engine {
 
         /**
-         * REQUIRES: see super @param powerLevel MODIFIES: this EFFECTS:
-         * Initializes a new this
+         * REQUIRES: see super @param powerLevel 
+         * MODIFIES: this 
+         * EFFECTS: Initializes a new this
          */
         public HypEngines(double powerLevel) {
             super(powerLevel);
         }
 
         /**
-         * REQUIRES: nothing MODIFIES: the ships location EFFECTS: If this has
-         * sufficient power move the ship to the next quadrant in the current
-         * direction
+         * REQUIRES: nothing 
+         * MODIFIES: the ships location 
+         * EFFECTS: If this has sufficient power move the ship to the next 
+         * quadrant in the current direction
          */
         @Override
         public void act() {
@@ -671,8 +682,9 @@ public class Ship extends SpaceObject implements Movable {
         }
 
         /**
-         * REQUIRES: see super MODIFIES: this EFFECTS: see super, sets values
-         * outside the scope of the super method
+         * REQUIRES: see super 
+         * MODIFIES: this 
+         * EFFECTS: see super, sets values outside the scope of the super method
          */
         @Override
         public void setActive(int[] velocity) {
@@ -688,7 +700,9 @@ public class Ship extends SpaceObject implements Movable {
     private class LRSensors extends ShipSystem {
 
         /**
-         * REQUIRES: MODIFIES: EFFECTS:
+         * REQUIRES: 
+         * MODIFIES: 
+         * EFFECTS:
          */
         public LRSensors(double powerLevel) {
             super(powerLevel);
@@ -696,7 +710,9 @@ public class Ship extends SpaceObject implements Movable {
         }
 
         /**
-         * REQUIRES: MODIFIES: EFFECTS:
+         * REQUIRES: 
+         * MODIFIES: 
+         * EFFECTS:
          */
         @Override
         public void act() {
@@ -709,7 +725,9 @@ public class Ship extends SpaceObject implements Movable {
     private class SRSensors extends ShipSystem {
 
         /**
-         * REQUIRES: MODIFIES: EFFECTS:
+         * REQUIRES: 
+         * MODIFIES: 
+         * EFFECTS:
          */
         public SRSensors(double powerLevel) {
             super(powerLevel);
@@ -717,7 +735,9 @@ public class Ship extends SpaceObject implements Movable {
         }
 
         /**
-         * REQUIRES: MODIFIES: EFFECTS:
+         * REQUIRES: 
+         * MODIFIES: 
+         * EFFECTS:
          */
         @Override
         public void act() {

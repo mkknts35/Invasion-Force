@@ -87,6 +87,9 @@ public class GamePanels {
         test.setLayout(new java.awt.GridBagLayout());
 
         textField = new JTextField(5);
+        textField.setBackground(Color.BLACK);
+        textField.setForeground(Color.WHITE);
+        textField.setBorder(null);
         powerLabels = new JLabel[TOTAL_POWERS];
         lRSensorLabel = new JLabel[TOTAL_SENSORS_ROWS];
 

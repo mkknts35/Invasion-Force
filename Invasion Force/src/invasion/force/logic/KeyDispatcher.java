@@ -69,7 +69,7 @@ public class KeyDispatcher extends JFrame implements KeyEventDispatcher {
     public void keyPressed(KeyEvent e) {
         if (e.getKeyCode() == KeyEvent.VK_ENTER) {
             if (e.getID() == KeyEvent.KEY_PRESSED) {
-                String cmd = typingArea.getText();
+                String cmd = typingArea.getText().toUpperCase();
                 processCommand(cmd);
                 typingArea.setText("");
             }
